@@ -151,7 +151,6 @@ function ProductVideo({ product, active, onSelect }) {
         active ? "collection-product--active" : ""
       }`}
       onClick={() => onSelect(product)}
-      id="collection"
     >
       <div className="collection-product__media">
         <video
@@ -160,7 +159,8 @@ function ProductVideo({ product, active, onSelect }) {
           loop
           muted
           playsInline
-          preload="metadata"
+          autoPlay={active}
+          preload="auto"
           poster=""
         />
 
@@ -189,6 +189,7 @@ function Collection() {
   const navigate = useNavigate();
   const [filter, setFilter] = useState("all");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [visibleProducts, setVisibleProducts] = useState([]);
 
   const [cartCount, setCartCount] = useState(() => {
     return Number(localStorage.getItem("mk-cart-count")) || 0;
@@ -257,6 +258,44 @@ function Collection() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+  useEffect(() => {
+  const cards = document.querySelectorAll(".collection-product");
+
+  if (!("IntersectionObserver" in window)) {
+    setVisibleProducts(products.map((product) => product.id));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      setVisibleProducts((current) => {
+        let next = [...current];
+
+        entries.forEach((entry) => {
+          const id = Number(
+            entry.target.querySelector(".collection-product__number")
+              ?.textContent
+          );
+
+          if (!id) return;
+
+          if (entry.isIntersecting) {
+            if (!next.includes(id)) next.push(id);
+          } else {
+            next = next.filter((item) => item !== id);
+          }
+        });
+
+        return next;
+      });
+    },
+    { threshold: 0.2 }
+  );
+
+  cards.forEach((card) => observer.observe(card));
+
+  return () => observer.disconnect();
+}, [filter]);
 
   return (
     <div
@@ -357,13 +396,16 @@ function Collection() {
 
           <div className="collection-grid">
             {filteredProducts.map((product) => (
-              <ProductVideo
-                key={product.id}
-                product={product}
-                active={!selectedProduct && product.id === 1}
-                onSelect={setSelectedProduct}
-              />
-            ))}
+  <ProductVideo
+    key={product.id}
+    product={product}
+    active={
+      !selectedProduct &&
+      visibleProducts.includes(product.id)
+    }
+    onSelect={setSelectedProduct}
+  />
+))}
           </div>
         </section>
       </main>

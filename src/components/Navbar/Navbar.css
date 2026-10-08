@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap");
+
 
 :root {
   --mk-dark: #1f2023;
@@ -24,7 +24,7 @@ html {
   z-index: 1000;
 
   background:  transparent;;
-
+font-family: "Cormorant Garamond", serif;
   color: var(--mk-cream);
 
   transition:

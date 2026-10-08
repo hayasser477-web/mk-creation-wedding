@@ -22,33 +22,37 @@ function App() {
 
   return (
     <BrowserRouter>
-      {showIntro ? (
-        <Intro onComplete={() => setShowIntro(false)} />
-      ) : (
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Home />
-                <MaisonStory />
-                <Mariage />
-                <Testimonials />
-                <CTA />
-                <Footer />
-              </>
-            }
-          />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/cgv" element={<ConditionsGenerales />} />
-          <Route path="/PolitiqueConfidentialite" element={<PolitiqueConfidentialite />} />
-          <Route path="/mentions-legales" element={<MentionsLegales />} />
-          <Route path="/collection" element={<Collection />} />
-          <Route path="/style" element={<Style />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/thank-you" element={<ThankYou />} />
-        </Routes>
-      )}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Home />
+              <MaisonStory />
+              <Mariage />
+              <Testimonials />
+              <CTA />
+              <Footer />
+
+              {showIntro && (
+                <Intro onComplete={() => setShowIntro(false)} />
+              )}
+            </>
+          }
+        />
+
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/cgv" element={<ConditionsGenerales />} />
+        <Route
+          path="/PolitiqueConfidentialite"
+          element={<PolitiqueConfidentialite />}
+        />
+        <Route path="/mentions-legales" element={<MentionsLegales />} />
+        <Route path="/collection" element={<Collection />} />
+        <Route path="/style" element={<Style />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/thank-you" element={<ThankYou />} />
+      </Routes>
     </BrowserRouter>
   );
 }

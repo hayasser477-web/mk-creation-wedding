@@ -11,13 +11,13 @@ import heroImg6 from "../../assets/images/hero (6).webp";
 import heroImg7 from "../../assets/images/hero (7).webp";
 
 const images = [
+  heroImg7,
   heroImg1,
   heroImg2,
   heroImg3,
   heroImg4,
   heroImg5,
   heroImg6,
-  heroImg7,
 ];
 
 const Hero = () => {
@@ -33,7 +33,7 @@ const Hero = () => {
         setActiveIndex((current) => (current + 1) % images.length);
         setIsTransitioning(false);
       }, 1250);
-    }, 4200);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -61,8 +61,7 @@ const Hero = () => {
 
       <div className="hero__inner">
         <div className="hero__content">
-          <span className="hero__eyebrow">
-          </span>
+          <span className="hero__eyebrow"></span>
 
           <h1>
             {t("hero.titleLine1")}
@@ -96,6 +95,9 @@ const Hero = () => {
                     src={image}
                     alt={`${t("hero.imageAlt", "Création MK")} ${index + 1}`}
                     draggable="false"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchPriority={index === 0 ? "high" : "auto"}
+                    decoding="async"
                   />
                 </div>
               );

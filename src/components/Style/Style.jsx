@@ -230,12 +230,12 @@ const products = [
 |--------------------------------------------------------------------------
 */
 
+
 function ProductVideo({ product, active, onSelect }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
     const video = videoRef.current;
-
     if (!video) return;
 
     if (active) {
@@ -257,10 +257,11 @@ function ProductVideo({ product, active, onSelect }) {
         <video
           ref={videoRef}
           src={product.video}
+          autoPlay={active}
           loop
           muted
           playsInline
-          preload="metadata"
+          preload={active ? "auto" : "metadata"}
         />
 
         <div className="collection-product__veil" />
@@ -299,6 +300,7 @@ function Style() {
   const [completed, setCompleted] = useState(false);
 
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [visibleProducts, setVisibleProducts] = useState([]);
 
   const [cartCount, setCartCount] = useState(() => {
     return Number(localStorage.getItem("mk-cart-count")) || 0;
@@ -405,6 +407,53 @@ function Style() {
   */
 
   const getRecommendedProducts = () => {
+    useEffect(() => {
+  if (!completed) return;
+
+  const cards = document.querySelectorAll(
+    ".style-results .collection-product"
+  );
+
+  if (!("IntersectionObserver" in window)) {
+    setVisibleProducts(
+      recommendedProducts.map((product) => product.id)
+    );
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      setVisibleProducts((previous) => {
+        const next = new Set(previous);
+
+        entries.forEach((entry) => {
+          const id = Number(
+            entry.target.querySelector(
+              ".collection-product__number"
+            )?.textContent
+          );
+
+          if (!id) return;
+
+          if (entry.isIntersecting) {
+            next.add(id);
+          } else {
+            next.delete(id);
+          }
+        });
+
+        return [...next];
+      });
+    },
+    {
+      threshold: 0.2,
+    }
+  );
+
+  cards.forEach((card) => observer.observe(card));
+
+  return () => observer.disconnect();
+}, [completed, recommendedProducts]);
     const scoredProducts = products.map((product, originalIndex) => {
       let score = 0;
 
@@ -909,9 +958,9 @@ function Style() {
                     key={product.id}
                     product={product}
                     active={
-                      !selectedProduct &&
-                      index === 0
-                    }
+  !selectedProduct &&
+  visibleProducts.includes(product.id)
+}
                     onSelect={
                       setSelectedProduct
                     }
