@@ -1,0 +1,667 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap");
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #1f2023;
+  color: #f1e4cc;
+  isolation: isolate;
+}
+
+/* =========================
+   BACKGROUND IMAGE
+========================= */
+
+.hero-background {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  transform: scale(1.04);
+  opacity: 0.58;
+
+  transition:
+    background-image 0s,
+    transform 1.45s cubic-bezier(0.77, 0, 0.175, 1),
+    opacity 1s ease;
+
+  filter: saturate(0.8);
+}
+
+.hero-background__overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      transparent
+    );
+}
+
+.hero-background__glow {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at 72% 48%,
+      rgba(217, 191, 140, 0.18) 0%,
+      rgba(184, 147, 90, 0.08) 30%,
+      transparent 65%
+    );
+}
+
+.hero-background--transition {
+  transform: scale(1.1);
+  opacity: 0.72;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.hero__inner {
+  position: relative;
+  min-height: 100vh;
+  width: min(1500px, 100%);
+  margin: 0 auto;
+
+  padding: 120px 7vw 70px;
+
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  align-items: center;
+  gap: 40px;
+  transform: translateY(-95px);
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.hero__content {
+  position: relative;
+  z-index: 30;
+  max-width: 510px;
+}
+
+.hero__eyebrow {
+  display: block;
+  margin-bottom: 28px;
+
+  color: #d9bf8c;
+
+  font-family: "Jost", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+}
+
+.hero__content h1 {
+  margin: 0;
+
+  color: #f1e4cc;
+
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(68px, 7vw, 118px);
+  font-weight: 500;
+  line-height: 1.00;
+  letter-spacing: -0.045em;
+}
+
+.hero__content h1 em {
+  color: #b8935a;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.hero__content p {
+  max-width: 390px;
+  margin: 42px 0 34px;
+
+  color: rgba(241, 228, 204, 0.7);
+
+  font-family: "Jost", sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.9;
+}
+
+.hero__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+
+  color: #f1e4cc;
+  background: #b8935a;
+  border-radius: 5px;
+ padding: 5px;
+  font-family: "Jost", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.hero__link span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid rgba(184, 147, 90, 0.6);
+  border-radius: 50%;
+
+  color: #d9bf8c;
+
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease;
+}
+
+.hero__link:hover span {
+  transform: translate(4px, -4px);
+  background: rgba(184, 147, 90, 0.12);
+}
+
+/* =========================
+   VISUAL
+========================= */
+
+.hero__visual {
+  position: relative;
+
+  min-height: 680px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding-right: 7%;
+}
+
+/* =========================
+   STACK
+========================= */
+
+.hero__stack {
+  position: relative;
+
+  width: 330px;
+  height: 510px;
+
+  perspective: 1400px;
+
+  transform: translateX(30px);
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.hero-card {
+  position: absolute;
+
+  top: 50%;
+  left: 20%;
+
+  width: 300px;
+  height: 445px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(217, 191, 140, 0.22);
+  border-radius: 20px;
+
+  background: #242424;
+
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.4),
+    0 10px 25px rgba(0, 0, 0, 0.22);
+
+  transform-origin: center center;
+
+  transition:
+    transform 1.25s cubic-bezier(0.77, 0, 0.175, 1),
+    opacity 1s ease,
+    filter 1s ease;
+
+  will-change: transform, opacity;
+}
+
+.hero-card img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+/* =========================
+   TOP CARD
+========================= */
+
+.hero-card--0 {
+  z-index: 20;
+
+  transform:
+    translate(-50%, -50%)
+    translateX(0)
+    translateY(0)
+    scale(1);
+
+  opacity: 1;
+
+  filter: brightness(0.96);
+}
+
+/* =========================
+   STACK CARDS
+========================= */
+
+.hero-card--1 {
+  z-index: 19;
+
+  transform:
+    translate(-50%, -50%)
+    translateX(-27px)
+    translateY(17px)
+    scale(0.94);
+
+  opacity: 0.95;
+  filter: brightness(0.8);
+}
+
+.hero-card--2 {
+  z-index: 18;
+
+  transform:
+    translate(-50%, -50%)
+    translateX(-54px)
+    translateY(34px)
+    scale(0.88);
+
+  opacity: 0.86;
+  filter: brightness(0.68);
+}
+
+.hero-card--3 {
+  z-index: 17;
+
+  transform:
+    translate(-50%, -50%)
+    translateX(-81px)
+    translateY(51px)
+    scale(0.82);
+
+  opacity: 0.72;
+  filter: brightness(0.56);
+}
+
+.hero-card--4 {
+  z-index: 16;
+
+  transform:
+    translate(-50%, -50%)
+    translateX(-108px)
+    translateY(68px)
+    scale(0.76);
+
+  opacity: 0.58;
+  filter: brightness(0.48);
+}
+
+.hero-card--5 {
+  z-index: 15;
+
+  transform:
+    translate(-50%, -50%)
+    translateX(-135px)
+    translateY(85px)
+    scale(0.7);
+
+  opacity: 0.42;
+  filter: brightness(0.4);
+}
+
+.hero-card--6 {
+  z-index: 14;
+
+  transform:
+    translate(-50%, -50%)
+    translateX(-162px)
+    translateY(102px)
+    scale(0.64);
+
+  opacity: 0.28;
+  filter: brightness(0.34);
+}
+
+/* =========================
+   TRANSITION
+========================= */
+
+/*
+  During the transition the whole stack moves
+  slightly so the top card feels like it is
+  being pulled into the background.
+*/
+
+.hero__stack--transitioning {
+  transform: translateX(30px) scale(1.015);
+  transition:
+    transform 1.25s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* =========================
+   BRAND
+========================= */
+
+.hero__brand {
+  position: absolute;
+
+  right: 2%;
+  bottom: 8%;
+
+  z-index: 30;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  color: #d9bf8c;
+}
+
+.hero__brand span {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 0.8;
+}
+
+.hero__brand small {
+  margin-top: 5px;
+
+  font-family: "Jost", sans-serif;
+  font-size: 7px;
+  letter-spacing: 0.45em;
+}
+
+/* =========================
+   SCROLL
+========================= */
+
+.hero__scroll {
+  position: absolute;
+
+  left: 0;
+  bottom: 7%;
+
+  z-index: 30;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  color: rgba(241, 228, 204, 0.5);
+
+  font-family: "Jost", sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.35em;
+
+  writing-mode: vertical-rl;
+}
+
+.hero__scroll i {
+  width: 1px;
+  height: 55px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #b8935a,
+      transparent
+    );
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1050px) {
+  .hero__inner {
+    padding-inline: 5vw;
+
+    grid-template-columns: 0.8fr 1.2fr;
+  }
+
+  .hero__content h1 {
+    font-size: clamp(60px, 8vw, 92px);
+  }
+
+  .hero__visual {
+    padding-right: 3%;
+  }
+
+  .hero__stack {
+    width: 300px;
+    height: 480px;
+    transform: translateX(20px);
+  }
+
+  .hero__stack--transitioning {
+    transform: translateX(20px) scale(1.015);
+  }
+
+  .hero-card {
+    width: 275px;
+    height: 410px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 100svh;
+  }
+
+  .hero-background__overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(31, 32, 35, 0.88) 0%,
+      rgba(31, 32, 35, 0.55) 28%,
+      rgba(31, 32, 35, 0.22) 62%,
+      rgba(31, 32, 35, 0.38) 100%
+    );
+}
+
+  .hero__inner {
+    min-height: 100svh;
+
+    padding: 120px 24px 50px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 40px;
+    transform: translateY(-25px);
+  }
+
+  .hero__content {
+    width: 100%;
+  }
+
+  .hero__eyebrow {
+    margin-bottom: 22px;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+  }
+
+  .hero__content h1 {
+    font-size: clamp(52px, 16vw, 82px);
+  letter-spacing: -0.025em;
+  padding-left: 4px;
+  }
+
+  .hero__content p {
+    margin: 25px 0;
+    max-width: 340px;
+    font-size: 13px;
+  }
+
+  .hero__visual {
+    width: 100%;
+    min-height: 430px;
+
+    justify-content: center;
+
+    padding-right: 0;
+  }
+
+  .hero__stack {
+    width: 280px;
+    height: 410px;
+
+    transform: translateX(15px);
+  }
+
+  .hero__stack--transitioning {
+    transform: translateX(35px) scale(1.015);
+  }
+
+  .hero-card {
+    width: 250px;
+    height: 365px;
+    position: absolute;
+    left: 90px;
+    top: 140px;
+    border-radius: 17px;
+  }
+
+  .hero-card--1 {
+    transform:
+      translate(-50%, -50%)
+      translateX(-23px)
+      translateY(14px)
+      scale(0.94);
+  }
+
+  .hero-card--2 {
+    transform:
+      translate(-50%, -50%)
+      translateX(-46px)
+      translateY(28px)
+      scale(0.88);
+  }
+
+  .hero-card--3 {
+    transform:
+      translate(-50%, -50%)
+      translateX(-69px)
+      translateY(42px)
+      scale(0.82);
+  }
+
+  .hero-card--4 {
+    transform:
+      translate(-50%, -50%)
+      translateX(-92px)
+      translateY(56px)
+      scale(0.76);
+  }
+
+  .hero-card--5 {
+    transform:
+      translate(-50%, -50%)
+      translateX(-115px)
+      translateY(70px)
+      scale(0.7);
+  }
+
+  .hero-card--6 {
+    transform:
+      translate(-50%, -50%)
+      translateX(-138px)
+      translateY(84px)
+      scale(0.64);
+  }
+
+  .hero__brand {
+    right: 1%;
+    bottom: 3%;
+  }
+
+  .hero__scroll {
+    display: none;
+  }
+   .hero__content h1 {
+     font-size: 40px;
+  letter-spacing: -0.025em;
+  padding-left: 4px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px) {
+  .hero__inner {
+    padding-inline: 18px;
+  }
+
+  .hero__stack {
+    width: 255px;
+    height: 375px;
+  }
+
+  .hero-card {
+    width: 230px;
+    height: 335px;
+  }
+
+  .hero__content h1 {
+     font-size: 30px;
+  letter-spacing: -0.025em;
+  padding-left: 4px;
+  }
+   .hero__content p {
+     font-size: 15px;
+  margin-right: 4px;
+   }
+}
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-card,
+  .hero-background,
+  .hero__stack {
+    transition: none;
+  }
+}

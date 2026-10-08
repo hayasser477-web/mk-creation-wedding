@@ -1,0 +1,471 @@
+/* =========================================
+   PRIVACY POLICY PAGE
+========================================= */
+
+.privacy-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #121212;
+  color: #f4f0e8;
+  isolation: isolate;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.privacy-hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(
+      circle at 50% 45%,
+      rgba(212, 175, 55, 0.08),
+      transparent 30%
+    ),
+    #121212;
+}
+
+.privacy-hero__noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* =========================================
+   HERO ORBS
+========================================= */
+
+.privacy-hero__orb {
+  position: absolute;
+  border: 1px solid rgba(212, 175, 55, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.privacy-hero__orb--one {
+  width: 620px;
+  height: 620px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.privacy-hero__orb--two {
+  width: 820px;
+  height: 820px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: rgba(230, 198, 135, 0.035);
+}
+
+/* =========================================
+   VERTICAL MARK
+========================================= */
+
+.privacy-hero__vertical {
+  position: absolute;
+  left: 4vw;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  font-family: "Manrope", sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: rgba(230, 198, 135, 0.45);
+}
+
+.privacy-hero__vertical i {
+  width: 1px;
+  height: 90px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(212, 175, 55, 0.7),
+    transparent
+  );
+}
+
+/* =========================================
+   HERO CONTENT
+========================================= */
+
+.privacy-hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 950px;
+  padding: 60px 24px;
+}
+
+.privacy-hero__eyebrow {
+  margin-bottom: 28px;
+  font-family: "Manrope", sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  color: #d4af37;
+}
+
+.privacy-hero h1 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(65px, 9vw, 130px);
+  line-height: 0.85;
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  color: #e6c687;
+}
+
+.privacy-hero h1 em {
+  font-style: italic;
+  color: #f4f0e8;
+}
+
+.privacy-hero__ornament {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 38px 0 26px;
+}
+
+.privacy-hero__ornament span {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.65)
+  );
+}
+
+.privacy-hero__ornament span:last-child {
+  background: linear-gradient(
+    90deg,
+    rgba(212, 175, 55, 0.65),
+    transparent
+  );
+}
+
+.privacy-hero__ornament i {
+  font-style: normal;
+  font-size: 13px;
+  color: #d4af37;
+}
+
+.privacy-hero__content p {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 21px;
+  line-height: 1.35;
+  color: rgba(244, 240, 232, 0.62);
+}
+
+/* =========================================
+   HERO BOTTOM
+========================================= */
+
+.privacy-hero__bottom {
+  position: absolute;
+  bottom: 30px;
+  left: 5vw;
+  right: 5vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Manrope", sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  color: rgba(230, 198, 135, 0.42);
+}
+
+.privacy-hero__bottom > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.privacy-hero__bottom i {
+  display: block;
+  width: 1px;
+  height: 42px;
+  background: linear-gradient(
+    to bottom,
+    rgba(212, 175, 55, 0.7),
+    transparent
+  );
+}
+
+/* =========================================
+   INTRO
+========================================= */
+
+.privacy-intro {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.35fr 1fr;
+  gap: 8vw;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 160px 7vw 120px;
+}
+
+.privacy-intro__number {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(80px, 12vw, 170px);
+  line-height: 0.7;
+  color: rgba(212, 175, 55, 0.12);
+  letter-spacing: -0.05em;
+}
+
+.privacy-intro__content {
+  max-width: 650px;
+}
+
+.privacy-intro__content > span {
+  display: block;
+  margin-bottom: 25px;
+  font-family: "Manrope", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  color: #d4af37;
+}
+
+.privacy-intro h2 {
+  margin: 0 0 32px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(50px, 6vw, 82px);
+  line-height: 0.9;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  color: #e6c687;
+}
+
+.privacy-intro h2 em {
+  font-style: italic;
+  color: #f4f0e8;
+}
+
+.privacy-intro p {
+  max-width: 520px;
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  line-height: 1.9;
+  color: rgba(244, 240, 232, 0.52);
+}
+
+/* =========================================
+   PRIVACY LIST
+========================================= */
+
+.privacy-list {
+  position: relative;
+  display: grid;
+  grid-template-columns: 180px minmax(0, 900px);
+  justify-content: center;
+  gap: 7vw;
+  padding: 80px 7vw 180px;
+  background: linear-gradient(180deg, #121212 0%, #151515 100%);
+}
+
+.privacy-list__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: 10px;
+  font-family: "Manrope", sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  color: rgba(230, 198, 135, 0.42);
+}
+
+.privacy-list__side div {
+  width: 35px;
+  height: 1px;
+  margin: 20px 0;
+  background: #997b2c;
+}
+
+.privacy-list__items {
+  width: 100%;
+}
+
+/* =========================================
+   PRIVACY ITEM
+========================================= */
+
+.privacy-item {
+  position: relative;
+  border-top: 1px solid rgba(230, 198, 135, 0.15);
+  padding: 40px 0;
+  transition: border-color 0.4s ease;
+}
+
+.privacy-item:last-child {
+  border-bottom: 1px solid rgba(230, 198, 135, 0.15);
+}
+
+.privacy-item:hover {
+  border-color: rgba(212, 175, 55, 0.42);
+}
+
+.privacy-item__header {
+  display: flex;
+  align-items: baseline;
+  gap: 25px;
+  margin-bottom: 18px;
+}
+
+.privacy-item__number {
+  font-family: "Manrope", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #997b2c;
+}
+
+.privacy-item__title {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-weight: 400;
+  color: #e6c687;
+  letter-spacing: -0.02em;
+}
+
+.privacy-item__body {
+  padding-left: 50px;
+}
+
+.privacy-item__body p {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: rgba(244, 240, 232, 0.65);
+}
+
+.privacy-item__body strong {
+  color: #f4f0e8;
+  font-weight: 600;
+}
+
+/* =========================================
+   END STATEMENT
+========================================= */
+
+.privacy-end {
+  position: relative;
+  text-align: center;
+  padding: 120px 24px 140px;
+  background: #121212;
+}
+
+.privacy-end__line {
+  width: 1px;
+  height: 80px;
+  margin: 0 auto 40px;
+  background: linear-gradient(to bottom, transparent, #997b2c, transparent);
+}
+
+.privacy-end span {
+  display: block;
+  font-family: "Manrope", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  color: #d4af37;
+  margin-bottom: 20px;
+}
+
+.privacy-end h2 {
+  margin: 0 0 40px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(40px, 5vw, 68px);
+  line-height: 0.95;
+  font-weight: 400;
+  color: #e6c687;
+}
+
+.privacy-end h2 em {
+  font-style: italic;
+  color: #f4f0e8;
+}
+
+.privacy-end__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 15px;
+  padding: 16px 36px;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #e6c687;
+  text-decoration: none;
+  font-family: "Manrope", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  transition: all 0.4s ease;
+}
+
+.privacy-end__button:hover {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.08);
+  color: #f4f0e8;
+}
+
+.privacy-end__monogram {
+  margin-top: 80px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 60px;
+  letter-spacing: 0.2em;
+  color: rgba(212, 175, 55, 0.08);
+}
+
+/* =========================================
+   REVEAL ANIMATION (تأثير الظهور)
+========================================= */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+[data-reveal][data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .privacy-intro {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .privacy-list {
+    grid-template-columns: 1fr;
+  }
+  .privacy-list__side {
+    display: none;
+  }
+  .privacy-item__body {
+    padding-left: 0;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  #title{
+    font-size: 40px;
+  }
+}

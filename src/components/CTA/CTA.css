@@ -1,0 +1,309 @@
+/* ==========================================
+   1. CTA MAIN CONTAINER
+   ========================================== */
+.cta {
+  position: relative;
+  padding: 120px 7vw 100px;
+  background: #121212;
+  color: #f7f1e7;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.cta__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(80vw, 900px);
+  height: min(80vw, 900px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(212, 175, 55, 0.07),
+    transparent 65%
+  );
+  filter: blur(30px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cta__container {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ==========================================
+   2. HEADER
+   ========================================== */
+.cta__header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.cta__eyebrow {
+  display: block;
+  font-family: "Manrope", sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: #d4af37;
+  margin-bottom: 20px;
+}
+
+.cta__header h2 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(48px, 6vw, 85px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.cta__header h2 em {
+  color: #e6c687;
+  font-style: italic;
+}
+
+.cta__ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  margin-top: 28px;
+}
+
+.cta__ornament span {
+  width: 45px;
+  height: 1px;
+  background: #997b2c;
+}
+
+.cta__ornament i {
+  font-size: 9px;
+  color: #d4af37;
+  font-style: normal;
+}
+
+/* ==========================================
+   3. CARDS SECTION (DUAL PORTALS)
+   ========================================== */
+.cta__cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.cta__card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 50px 40px;
+  border-radius: 4px;
+  backdrop-filter: blur(8px);
+  transition: all 500ms cubic-bezier(0.25, 1, 0.5, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* خلفية توهج البطاقة عند الـ Hover */
+.cta__card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(230, 198, 135, 0.08),
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 500ms ease;
+  pointer-events: none;
+}
+
+.cta__card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5),
+              0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.cta__card:hover .cta__card-glow {
+  opacity: 1;
+}
+
+.cta__card-tag {
+  display: block;
+  font-family: "Manrope", sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: #997b2c;
+  margin-bottom: 15px;
+}
+
+.cta__card h3 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 32px;
+  font-weight: 400;
+  margin: 0 0 15px;
+  color: #f7f1e7;
+}
+
+.cta__card p {
+  font-family: "Manrope", sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(247, 241, 231, 0.65);
+  margin-bottom: 35px;
+}
+
+/* ==========================================
+   4. ANIMATED BUTTONS
+   ========================================== */
+.cta__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 28px;
+  text-decoration: none;
+  font-family: "Manrope", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: all 400ms ease;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+/* الزر الأول: حدود شفافة وتعبئة عند الـ Hover */
+.cta__btn--primary {
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  color: #e6c687;
+  background: transparent;
+}
+
+.cta__btn--primary:hover {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.1);
+  color: #ffffff;
+}
+
+/* الزر الثاني: ذهبي فاخر مع أنيميشن لمّاع */
+.cta__btn--gold {
+  background: #e6c687;
+  color: #121212;
+  font-weight: 600;
+  border: 1px solid #e6c687;
+}
+
+.cta__btn--gold::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 600ms ease;
+}
+
+.cta__btn--gold:hover::before {
+  left: 100%;
+}
+
+.cta__btn--gold:hover {
+  background: #d4af37;
+  border-color: #d4af37;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.cta__btn-icon {
+  font-style: normal;
+  margin-left: 15px;
+  transition: transform 300ms ease;
+}
+
+.cta__btn:hover .cta__btn-icon {
+  transform: translateX(5px);
+}
+
+/* ==========================================
+   5. FOOTER QUICK CONTACT
+   ========================================== */
+.cta__footer {
+  margin-top: 60px;
+  text-align: center;
+  border-top: 1px solid rgba(212, 175, 55, 0.15);
+  padding-top: 30px;
+}
+
+.cta__quick-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  font-family: "Manrope", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(247, 241, 231, 0.5);
+}
+
+.cta__quick-contact a {
+  color: #e6c687;
+  text-decoration: none;
+  transition: color 300ms ease;
+}
+
+.cta__quick-contact a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.cta__dot {
+  color: #997b2c;
+}
+
+/* ==========================================
+   6. RESPONSIVE DESIGN
+   ========================================== */
+@media (max-width: 868px) {
+  .cta__cards {
+    grid-template-columns: 1fr; /* تحويل البطاقات لعمود واحد */
+    gap: 20px;
+  }
+
+  .cta__card {
+    padding: 35px 25px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cta {
+    padding: 80px 20px 60px;
+  }
+
+  .cta__header h2 {
+    font-size: clamp(38px, 10vw, 55px);
+  }
+
+  .cta__quick-contact {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cta__dot {
+    display: none;
+  }
+}

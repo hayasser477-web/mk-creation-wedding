@@ -1,0 +1,371 @@
+/* ==========================================
+   1. MAIN CONTAINER & BACKGROUND
+   ========================================== */
+.testimonials {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 130px 7vw 90px;
+  background:
+    radial-gradient(
+      circle at 50% 48%,
+      rgba(212, 175, 55, 0.055),
+      transparent 34%
+    ),
+    #121212;
+  color: #f7f1e7;
+  isolation: isolate;
+}
+
+/* GOLDEN ATMOSPHERE GLOW */
+.testimonials__glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(60vw, 800px);
+  height: min(60vw, 800px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(230, 198, 135, 0.045),
+      transparent 68%
+    );
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+/* ==========================================
+   2. HEADER / TOP SECTION
+   ========================================== */
+.testimonials__top {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+}
+
+.testimonials__eyebrow {
+  display: block;
+  margin-bottom: 24px;
+  font-family: "Manrope", sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.42em;
+  color: #d4af37;
+}
+
+.testimonials__top h2 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(58px, 7vw, 105px);
+  font-weight: 400;
+  line-height: 0.82;
+  letter-spacing: -0.035em;
+}
+
+.testimonials__top h2 em {
+  color: #e6c687;
+  font-style: italic;
+}
+
+.testimonials__ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  margin-top: 32px;
+}
+
+.testimonials__ornament span {
+  width: 45px;
+  height: 1px;
+  background: #997b2c;
+}
+
+.testimonials__ornament i {
+  font-size: 9px;
+  color: #d4af37;
+  font-style: normal;
+}
+
+/* ==========================================
+   3. MAIN STAGE & IMAGE CONTAINER
+   ========================================== */
+.testimonials__stage {
+  position: relative;
+  width: min(1100px, 100%);
+  min-height: 430px;
+  margin: 45px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* GIANT BACKGROUND QUOTES */
+.testimonials__giant-mark {
+  position: absolute;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(200px, 25vw, 420px);
+  font-weight: 400;
+  line-height: 0.5;
+  color: rgba(212, 175, 55, 0.05);
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.testimonials__giant-mark--left {
+  left: 5%;
+  top: 10%;
+}
+
+.testimonials__giant-mark--right {
+  right: 5%;
+  bottom: 10%;
+}
+
+/* CONTENT WRAPPER */
+.testimonials__content {
+  position: relative;
+  z-index: 3;
+  width: min(760px, 90%);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 450ms ease,
+    transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.testimonials__content.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* IMAGE CONTAINER & STYLING */
+.testimonials__image-container {
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 4 / 3;
+  height: auto;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.testimonials__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.testimonials__image-container:hover .testimonials__image {
+  transform: scale(1.04);
+}
+
+/* NUMBER COUNTER */
+.testimonials__number {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 15px;
+  font-family: "Manrope", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #d4af37;
+}
+
+.testimonials__number-divider {
+  width: 1px;
+  height: 12px;
+  background-color: #997b2c;
+  transform: rotate(20deg);
+}
+
+/* ==========================================
+   4. SIDE LABEL
+   ========================================== */
+.testimonials__side {
+  position: absolute;
+  right: -35px;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: center;
+  font-family: "Manrope", sans-serif;
+  font-size: 7px;
+  letter-spacing: 0.32em;
+  color: rgba(230, 198, 135, 0.42);
+}
+
+.testimonials__side-line {
+  width: 45px;
+  height: 1px;
+  background: #997b2c;
+}
+
+/* ==========================================
+   5. CONTROLS & NAVIGATION
+   ========================================== */
+.testimonials__controls {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  margin-top: 25px;
+}
+
+/* PROGRESS NUMBERS */
+.testimonials__progress {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.testimonials__progress button {
+  position: relative;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(247, 241, 231, 0.28);
+  cursor: pointer;
+  font-family: "Manrope", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  transition: color 300ms ease;
+}
+
+.testimonials__progress button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 0;
+  height: 1px;
+  transform: translateX(-50%);
+  background: #d4af37;
+  transition: width 400ms ease;
+}
+
+.testimonials__progress button.is-active {
+  color: #e6c687;
+  font-weight: 600;
+}
+
+.testimonials__progress button.is-active::after {
+  width: 100%;
+}
+
+/* ARROW BUTTONS */
+.testimonials__arrows {
+  display: flex;
+  gap: 8px;
+}
+
+.testimonials__arrows button {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #121212;
+  background: #e6c687;
+  border: 1px solid #e6c687;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 300ms ease;
+}
+
+.testimonials__arrows button:hover {
+  background: #d4af37;
+  border-color: #d4af37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+}
+
+/* ==========================================
+   6. RESPONSIVE DESIGN (MEDIA QUERIES)
+   ========================================== */
+
+/* TABLETS (أقل من 768px) */
+@media (max-width: 768px) {
+  .testimonials__image-container {
+    max-width: 88%;
+    aspect-ratio: 4 / 3;
+  }
+
+  .testimonials__giant-mark {
+    font-size: 180px;
+  }
+
+  .testimonials__side {
+    display: none;
+  }
+}
+
+/* MOBILE MEDIUM (أقل من 700px) */
+@media (max-width: 700px) {
+  .testimonials {
+    padding: 100px 24px 65px;
+  }
+
+  .testimonials__top h2 {
+    font-size: clamp(48px, 13vw, 70px);
+  }
+
+  .testimonials__stage {
+    min-height: auto;
+    margin-top: 30px;
+  }
+
+  .testimonials__controls {
+    flex-direction: column-reverse;
+    gap: 20px;
+  }
+}
+
+/* SMALL MOBILE (أقل من 480px) */
+@media (max-width: 480px) {
+  .testimonials__image-container {
+    max-width: 100%;
+    aspect-ratio: 1 / 1; /* مربع على الشاشات الصغيرة جداً */
+  }
+
+  .testimonials__giant-mark--left {
+    left: 0;
+    top: -20px;
+  }
+
+  .testimonials__giant-mark--right {
+    right: 0;
+    bottom: -20px;
+  }
+}
+
+/* ==========================================
+   7. ACCESSIBILITY & REDUCED MOTION
+   ========================================== */
+@media (prefers-reduced-motion: reduce) {
+  .testimonials__content,
+  .testimonials__image {
+    transition: none !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,701 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap");
+
+:root {
+  --mk-dark: #1f2023;
+  --mk-cream: #f1e4cc;
+  --mk-gold: #b8935a;
+  --mk-dark-gold: #8a6a3b;
+  --mk-light-gold: #d9bf8c;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 88px;
+  z-index: 1000;
+
+  background:  transparent;;
+
+  color: var(--mk-cream);
+
+  transition:
+    background 0.5s ease,
+    backdrop-filter 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+.navbar-scrolled {
+  background-color: rgba(241, 228, 204, 0.5);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+/* =========================
+   INNER
+========================= */
+
+.navbar-inner {
+  position: relative;
+
+  width: min(94%, 1500px);
+  height: 100%;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: 110px 1fr 130px;
+  align-items: center;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  width: 70px;
+  height: 70px;
+
+  text-decoration: none;
+}
+
+.navbar-logo img {
+  width: 58px;
+  height: auto;
+
+  object-fit: contain;
+
+  display: block;
+
+  transition:
+    transform 0.45s ease,
+    filter 0.45s ease;
+}
+
+.navbar-logo:hover img {
+  transform: scale(1.05);
+
+  filter:
+    drop-shadow(0 0 8px rgba(217, 191, 140, 0.2));
+}
+
+/* =========================
+   DESKTOP LINKS
+========================= */
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 2.0vw, 40px);
+}
+
+.navbar-links a {
+  position: relative;
+
+  color: var(--mk-cream);
+
+  font-family: "Jost", sans-serif;
+  font-size: 11px;
+  font-weight: 100;
+
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.navbar-links a::after {
+  content: "";
+
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+
+  width: 100%;
+  height: 1px;
+
+  background: var(--mk-gold);
+
+  transform: scaleX(0);
+  transform-origin: right;
+
+  transition: transform 0.4s ease;
+}
+
+.navbar-links a:hover {
+  color: var(--mk-light-gold);
+}
+
+.navbar-links a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* =========================
+   CART
+========================= */
+
+.navbar-cart {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+
+  color: var(--mk-cream);
+
+  text-decoration: none;
+
+  font-family: "Jost", sans-serif;
+}
+
+.cart-icon {
+  font-size: 18px;
+  color: var(--mk-gold);
+}
+
+.cart-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+
+.cart-count {
+  min-width: 19px;
+  height: 19px;
+
+  padding: 0 5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(184, 147, 90, 0.65);
+  border-radius: 50%;
+
+  color: var(--mk-light-gold);
+
+  font-size: 9px;
+}
+
+/* =========================
+   PROGRESS LINE
+========================= */
+
+.navbar-progress-track {
+  position: absolute;
+
+  left: 0;
+  bottom: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background: rgba(184, 147, 90, 0.12);
+}
+
+.navbar-progress {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  background: linear-gradient(
+    90deg,
+    var(--mk-dark-gold),
+    var(--mk-gold),
+    var(--mk-light-gold)
+  );
+
+  transform-origin: left center;
+
+  box-shadow: 0 0 5px rgba(217, 191, 140, 0.25);
+
+  will-change: transform;
+}
+
+/* =========================
+   MENU BUTTON
+========================= */
+
+.menu-button {
+  display: none;
+
+  position: relative;
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.menu-button span {
+  position: absolute;
+
+  left: 8px;
+
+  width: 25px;
+  height: 1px;
+
+  background: var(--mk-cream);
+
+  transition:
+    transform 0.4s ease,
+    top 0.4s ease;
+}
+
+.menu-button span:first-child {
+  top: 16px;
+}
+
+.menu-button span:last-child {
+  top: 25px;
+}
+
+.menu-button.is-open span:first-child {
+  top: 21px;
+  transform: rotate(45deg);
+}
+
+.menu-button.is-open span:last-child {
+  top: 21px;
+  transform: rotate(-45deg);
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+
+  z-index: 900;
+
+  visibility: hidden;
+  opacity: 0;
+
+  pointer-events: none;
+
+  background: var(--mk-dark);
+
+  transition:
+    opacity 0.5s ease,
+    visibility 0.5s ease;
+}
+
+.mobile-menu-open {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Background image */
+
+.mobile-menu-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.mobile-menu-open .mobile-menu-background {
+  transform: scale(1);
+}
+
+/* Transparent brand color */
+
+.mobile-menu-overlay {
+  position: absolute;
+  inset: 0;
+
+  /* شفافة جداً لعدم إخفاء الصورة */
+  background: linear-gradient(
+    135deg,
+    rgba(31, 32, 35, 0.15),
+    rgba(184, 147, 90, 0.1)
+  );
+
+  backdrop-filter: none; /* إلغاء الضبابية */
+}
+
+/* =========================
+   MOBILE LINKS
+========================= */
+
+.mobile-menu-links {
+  position: relative;
+
+  z-index: 2;
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 24px;
+
+  padding: 90px 25px 110px;
+}
+
+.mobile-menu-links a {
+  color: var(--mk-cream);
+
+  font-family: "Cormorant Garamond", serif;
+
+  /* 1. تصغير الحد الأدنى للخط من 30px إلى 22px ليناسب شاشات الهواتف */
+  font-size: clamp(22px, 6.5vw, 52px);
+  font-weight: 500;
+
+  line-height: 1.2;
+
+  letter-spacing: 0.04em;
+
+  text-decoration: none;
+
+  /* 2. تضمن عدم انكسار النص لسطرين على شاشات المحمول */
+  white-space: nowrap;
+
+  /* 3. محاذاة النص في المنتصف تماماً في حال التفافه */
+  text-align: center;
+
+  opacity: 0;
+  transform: translateY(25px);
+
+  transition:
+    color 0.3s ease,
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.mobile-menu-open .mobile-menu-links a {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mobile-menu-open .mobile-menu-links a:nth-child(1) {
+  transition-delay: 0.08s;
+}
+
+.mobile-menu-open .mobile-menu-links a:nth-child(2) {
+  transition-delay: 0.14s;
+}
+
+.mobile-menu-open .mobile-menu-links a:nth-child(3) {
+  transition-delay: 0.2s;
+}
+
+.mobile-menu-open .mobile-menu-links a:nth-child(4) {
+  transition-delay: 0.26s;
+}
+
+.mobile-menu-open .mobile-menu-links a:nth-child(5) {
+  transition-delay: 0.32s;
+}
+
+.mobile-menu-open .mobile-menu-links a:nth-child(6) {
+  transition-delay: 0.38s;
+}
+
+.mobile-menu-links a:hover {
+  color: var(--mk-light-gold);
+}
+
+.mobile-cart-link {
+  margin-top: 14px;
+
+  font-family: "Jost", sans-serif !important;
+
+  font-size: 12px !important;
+  letter-spacing: 0.2em !important;
+}
+
+.mobile-cart-link span {
+  color: var(--mk-light-gold);
+}
+
+/* =========================
+   MOBILE FOOTER
+========================= */
+
+.mobile-menu-footer {
+  position: absolute;
+
+  left: 25px;
+  right: 25px;
+  bottom: 25px;
+
+  z-index: 3;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  color: var(--mk-light-gold);
+
+  font-family: "Jost", sans-serif;
+
+  font-size: 8px;
+
+  letter-spacing: 0.18em;
+
+  opacity: 0;
+  transition: opacity 0.7s ease 0.45s;
+}
+
+.mobile-menu-open .mobile-menu-footer {
+  opacity: 1;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1050px) {
+  .navbar-inner {
+    grid-template-columns: 85px 1fr 100px;
+  }
+
+  .navbar-links {
+    gap: 20px;
+  }
+
+  .navbar-links a {
+    font-size: 9px;
+  }
+
+  .cart-label {
+    display: none;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .navbar {
+    height: 76px;
+  }
+
+  .navbar-inner {
+    width: calc(100% - 32px);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .navbar-logo {
+    width: 58px;
+    height: 58px;
+  }
+
+  .navbar-logo img {
+    width: 52px;
+  }
+
+  .navbar-links,
+  .navbar-cart {
+    display: none;
+  }
+
+  .menu-button {
+    display: block;
+  }
+
+  .navbar-scrolled {
+  background: rgba(61, 57, 57, 0.88);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+  }
+
+
+/* =========================
+   REDUCED MOTION
+========================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .navbar-links a,
+  .navbar-links a::after,
+  .navbar-logo img,
+  .mobile-menu,
+  .mobile-menu-background,
+  .mobile-menu-links a,
+  .menu-button span {
+    transition: none !important;
+  }
+}
+/* Navbar Container Settings */
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 24px; /* لضمان وجود مساحة كافية على اليمين واليسار */
+  box-sizing: border-box;
+}
+
+.navbar-logo {
+  flex-shrink: 0;
+}
+
+/* Navbar Right Actions (Language + Cart) */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0; /* يمنع انكماش السلة أو خيار اللغة أو اختفائهما */
+}
+
+/* Language Selector styling */
+.lang-dropdown {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap; /* يمنع نزول النص لسطر جديد */
+  transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.flag-icon {
+  width: 20px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.lang-arrow {
+  font-size: 8px;
+  transition: transform 0.2s ease;
+  opacity: 0.8;
+}
+
+.lang-arrow.open {
+  transform: rotate(180deg);
+}
+
+.lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: #ffffff;
+  color: #1e293b;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  padding: 6px 0;
+  margin: 0;
+  min-width: 120px;
+  z-index: 1001;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
+}
+
+.lang-option:hover {
+  background-color: #f1f5f9;
+}
+
+.lang-option.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+/* Cart Button */
+.navbar-cart {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap; /* يمنع انكماش أو اختفاء أجزاء من كلمة PANIER */
+  flex-shrink: 0;
+}
+
+/* Media Query Responsive Adjustments */
+@media (max-width: 992px) {
+  .navbar-inner {
+    padding: 10px 16px;
+  }
+
+  /* إخفاء روابط القائمة الرئيسية للشاشات الكبيرة */
+  .navbar-links {
+    display: none;
+  }
+
+  /* جعل زر اختيار اللغة والسلة يتوسطان بين اللوجو وزر الهمبرغر */
+  .navbar-actions {
+    margin: 0 auto;
+    gap: 12px;
+  }
+
+  .menu-button {
+    display: flex;
+    flex-shrink: 0;
+  }
+}

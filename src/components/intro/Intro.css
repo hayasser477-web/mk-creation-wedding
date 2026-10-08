@@ -1,0 +1,199 @@
+/* إعدادات الخلفية والكونتينر */
+.intro-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #121212;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+  transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+.intro-container.fade-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* المحتوى المركزي */
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 2;
+}
+
+/* الإطار الدائري المتوهج */
+.gold-ring-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 2px solid #D4AF37;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 15px rgba(212, 175, 55, 0.2);
+  animation: ringPulse 2.5s infinite alternate ease-in-out;
+}
+
+.outer-glow-ring {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  border-radius: 50%;
+  border: 1px dashed rgba(230, 198, 135, 0.5);
+  animation: rotateSlow 20s linear infinite;
+}
+
+/* التاج */
+.crown-container {
+  width: 32px;
+  height: 32px;
+  margin-bottom: 2px;
+  animation: dropInDown 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.crown-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* الحروف MK */
+.brand-letters {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #E6C687 0%, #D4AF37 50%, #997B2C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+  letter-spacing: 2px;
+  opacity: 0;
+  animation: fadeInUp 1s ease 0.5s forwards;
+}
+
+/* النصوص السفلية */
+.brand-text-container {
+  margin-top: 25px;
+  opacity: 0;
+  animation: fadeInUp 1s ease 1s forwards;
+}
+
+.brand-name {
+  font-family: 'Cinzel', 'Times New Roman', serif;
+  color: #E6C687;
+  font-size: 1.4rem;
+  letter-spacing: 5px;
+  font-weight: 500;
+  margin: 0 0 8px 0;
+}
+
+.gold-divider {
+  width: 50px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #D4AF37, transparent);
+  margin: 0 auto 8px auto;
+  animation: expandWidth 1s ease 1.2s forwards;
+}
+
+.brand-tagline {
+  font-family: 'Montserrat', sans-serif;
+  color: #997B2C;
+  font-size: 0.75rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* الجسيمات الذهبية المتطايرة */
+.gold-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background-color: #E6C687;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #D4AF37;
+  opacity: 0;
+  animation: floatParticle 4s infinite ease-in-out;
+}
+
+/* حاوية اللوجو الأصلي داخل الإطار الدائري */
+.logo-container {
+  width: 115px;
+  height: 115px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: dropInDown 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.original-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* لضمان ملء الدائرة بشكل متناسق دون تشوه */
+}
+
+/* تعديل حجم الإطار الدائري ليتناسب مع حجم اللوجو */
+.gold-ring-wrapper {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 2px solid #D4AF37;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.4), inset 0 0 15px rgba(212, 175, 55, 0.2);
+  animation: ringPulse 2.5s infinite alternate ease-in-out;
+}
+
+/* الأنيماشن (Keyframes) */
+@keyframes dropInDown {
+  0% { transform: translateY(-30px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  0% { transform: translateY(15px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes ringPulse {
+  0% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3), inset 0 0 10px rgba(212, 175, 55, 0.1); }
+  100% { box-shadow: 0 0 35px rgba(230, 198, 135, 0.6), inset 0 0 20px rgba(230, 198, 135, 0.3); }
+}
+
+@keyframes rotateSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes expandWidth {
+  0% { width: 0; opacity: 0; }
+  100% { width: 80px; opacity: 1; }
+}
+
+@keyframes floatParticle {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+}
