@@ -1,7 +1,7 @@
+
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
@@ -60,22 +60,6 @@ const questions = [
     ],
   },
 ];
-
-/*
-|--------------------------------------------------------------------------
-| PRODUCTS
-|--------------------------------------------------------------------------
-| كل منتج عنده:
-| - معلومات Collection
-| - معلومات Style Quiz
-|
-| الأولوية في المطابقة:
-| Model    = 100 points
-| Occasion = 10 points
-| Style    = 1 point
-|
-| بهذا الشكل السؤال الأول له الأولوية الأكبر.
-*/
 
 const products = [
   {
@@ -224,23 +208,22 @@ const products = [
   },
 ];
 
-/*
-|--------------------------------------------------------------------------
-| PRODUCT VIDEO
-|--------------------------------------------------------------------------
-*/
-
-
 function ProductVideo({ product, active, onSelect }) {
   const videoRef = useRef(null);
 
   useEffect(() => {
     const video = videoRef.current;
+
     if (!video) return;
 
     if (active) {
       video.muted = true;
-      video.play().catch(() => {});
+
+      const playPromise = video.play();
+
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
     } else {
       video.pause();
     }
@@ -251,6 +234,7 @@ function ProductVideo({ product, active, onSelect }) {
       className={`collection-product ${
         active ? "collection-product--active" : ""
       }`}
+      data-product-id={product.id}
       onClick={() => onSelect(product)}
     >
       <div className="collection-product__media">
@@ -261,7 +245,7 @@ function ProductVideo({ product, active, onSelect }) {
           loop
           muted
           playsInline
-          preload={active ? "auto" : "metadata"}
+          preload="auto"
         />
 
         <div className="collection-product__veil" />
@@ -284,12 +268,6 @@ function ProductVideo({ product, active, onSelect }) {
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| STYLE
-|--------------------------------------------------------------------------
-*/
-
 function Style() {
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -308,24 +286,12 @@ function Style() {
 
   const currentQuestion = questions[currentStep];
 
-  /*
-  |--------------------------------------------------------------------------
-  | SELECT OPTION
-  |--------------------------------------------------------------------------
-  */
-
   const selectOption = (option) => {
     setAnswers((previous) => ({
       ...previous,
       [currentQuestion.id]: option,
     }));
   };
-
-  /*
-  |--------------------------------------------------------------------------
-  | NEXT
-  |--------------------------------------------------------------------------
-  */
 
   const nextStep = () => {
     if (!answers[currentQuestion.id]) return;
@@ -334,12 +300,10 @@ function Style() {
       setCompleted(true);
 
       setTimeout(() => {
-        document
-          .getElementById("style-results")
-          ?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
+        document.getElementById("style-results")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
       }, 150);
 
       return;
@@ -352,12 +316,6 @@ function Style() {
     }, 100);
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | PREVIOUS
-  |--------------------------------------------------------------------------
-  */
-
   const previousStep = () => {
     if (currentStep === 0) return;
 
@@ -368,17 +326,13 @@ function Style() {
     }, 100);
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | RESTART
-  |--------------------------------------------------------------------------
-  */
-
   const restart = () => {
     setAnswers({});
     setCurrentStep(0);
     setCompleted(false);
     setDirection("forward");
+    setVisibleProducts([]);
+    setSelectedProduct(null);
 
     window.scrollTo({
       top: 0,
@@ -386,88 +340,14 @@ function Style() {
     });
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | SMART MATCHING
-  |--------------------------------------------------------------------------
-  |
-  | السؤال الأول = 100 نقطة
-  | السؤال الثاني = 10 نقاط
-  | السؤال الثالث = 1 نقطة
-  |
-  | مثال:
-  |
-  | نفس Model فقط       = 100
-  | نفس Model + Occasion = 110
-  | نفس الثلاثة          = 111
-  |
-  | بهذه الطريقة حتى لو لم يوجد منتج مطابق 100%
-  | سيظهر الأقرب دائمًا.
-  |
-  */
-
+  // Smart matching: model 100, occasion 10, style 1.
   const getRecommendedProducts = () => {
-    useEffect(() => {
-  if (!completed) return;
-
-  const cards = document.querySelectorAll(
-    ".style-results .collection-product"
-  );
-
-  if (!("IntersectionObserver" in window)) {
-    setVisibleProducts(
-      recommendedProducts.map((product) => product.id)
-    );
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      setVisibleProducts((previous) => {
-        const next = new Set(previous);
-
-        entries.forEach((entry) => {
-          const id = Number(
-            entry.target.querySelector(
-              ".collection-product__number"
-            )?.textContent
-          );
-
-          if (!id) return;
-
-          if (entry.isIntersecting) {
-            next.add(id);
-          } else {
-            next.delete(id);
-          }
-        });
-
-        return [...next];
-      });
-    },
-    {
-      threshold: 0.2,
-    }
-  );
-
-  cards.forEach((card) => observer.observe(card));
-
-  return () => observer.disconnect();
-}, [completed, recommendedProducts]);
     const scoredProducts = products.map((product, originalIndex) => {
       let score = 0;
 
-      if (product.model === answers.model) {
-        score += 100;
-      }
-
-      if (product.occasion === answers.occasion) {
-        score += 10;
-      }
-
-      if (product.style === answers.style) {
-        score += 1;
-      }
+      if (product.model === answers.model) score += 100;
+      if (product.occasion === answers.occasion) score += 10;
+      if (product.style === answers.style) score += 1;
 
       return {
         ...product,
@@ -475,12 +355,6 @@ function Style() {
         originalIndex,
       };
     });
-
-    /*
-    | ترتيب:
-    | 1. أعلى Score
-    | 2. إذا تعادلوا نحافظ على ترتيب المنتجات الأصلي
-    */
 
     return scoredProducts
       .sort((a, b) => {
@@ -497,79 +371,137 @@ function Style() {
     ? getRecommendedProducts()
     : [];
 
-  /*
-  |--------------------------------------------------------------------------
-  | ADD TO CART
-  |--------------------------------------------------------------------------
-  */
-
- const addToCart = () => {
-  if (!selectedProduct) return;
-
-  const existingCart = JSON.parse(
-    localStorage.getItem("mk-cart") || "[]"
-  );
-
-  const existingProduct = existingCart.find(
-    (item) => item.id === selectedProduct.id
-  );
-
-  let updatedCart;
-
-  if (existingProduct) {
-    updatedCart = existingCart.map((item) =>
-      item.id === selectedProduct.id
-        ? {
-            ...item,
-            quantity: (item.quantity || 1) + 1,
-          }
-        : item
-    );
-  } else {
-    updatedCart = [
-      ...existingCart,
-      {
-        ...selectedProduct,
-        quantity: 1,
-      },
-    ];
-  }
-
-  const totalCount = updatedCart.reduce(
-    (total, item) => total + (item.quantity || 1),
-    0
-  );
-
-  localStorage.setItem("mk-cart", JSON.stringify(updatedCart));
-  localStorage.setItem("mk-cart-count", String(totalCount));
-
-  setCartCount(totalCount);
-
-  navigate("/cart");
-};
-
-  /*
-  |--------------------------------------------------------------------------
-  | MODAL BODY LOCK
-  |--------------------------------------------------------------------------
-  */
-
+  // Desktop: first recommendation only.
+  // Mobile: activate videos when their cards enter the viewport.
   useEffect(() => {
-    document.body.style.overflow = selectedProduct
-      ? "hidden"
-      : "";
+    if (!completed) {
+      setVisibleProducts([]);
+      return;
+    }
+
+    const cards = document.querySelectorAll(
+      "#style-results .collection-product"
+    );
+
+    const isMobile = window.matchMedia(
+      "(max-width: 700px)"
+    ).matches;
+
+    if (!isMobile) {
+      setVisibleProducts(
+        recommendedProducts.length > 0
+          ? [recommendedProducts[0].id]
+          : []
+      );
+
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      setVisibleProducts(
+        recommendedProducts.map((product) => product.id)
+      );
+
+      return;
+    }
+
+    setVisibleProducts([]);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setVisibleProducts((previous) => {
+          const next = new Set(previous);
+
+          entries.forEach((entry) => {
+            const id = Number(entry.target.dataset.productId);
+
+            if (!id) return;
+
+            if (entry.isIntersecting) {
+              next.add(id);
+            } else {
+              next.delete(id);
+            }
+          });
+
+          return [...next];
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px 80px 0px",
+      }
+    );
+
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, [completed]);
+
+  const addToCart = () => {
+    if (!selectedProduct) return;
+
+    let existingCart;
+
+    try {
+      existingCart = JSON.parse(
+        localStorage.getItem("mk-cart") || "[]"
+      );
+
+      if (!Array.isArray(existingCart)) {
+        existingCart = [];
+      }
+    } catch {
+      existingCart = [];
+    }
+
+    const existingProduct = existingCart.find(
+      (item) => item.id === selectedProduct.id
+    );
+
+    let updatedCart;
+
+    if (existingProduct) {
+      updatedCart = existingCart.map((item) =>
+        item.id === selectedProduct.id
+          ? {
+              ...item,
+              quantity: (item.quantity || 1) + 1,
+            }
+          : item
+      );
+    } else {
+      updatedCart = [
+        ...existingCart,
+        {
+          ...selectedProduct,
+          quantity: 1,
+        },
+      ];
+    }
+
+    const totalCount = updatedCart.reduce(
+      (total, item) => total + (item.quantity || 1),
+      0
+    );
+
+    localStorage.setItem("mk-cart", JSON.stringify(updatedCart));
+    localStorage.setItem("mk-cart-count", String(totalCount));
+
+    setCartCount(totalCount);
+    navigate("/cart");
+  };
+
+  // Prevent background scrolling while the product modal is open.
+  useEffect(() => {
+    document.body.style.overflow = selectedProduct ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
     };
   }, [selectedProduct]);
 
-  /*
-  |--------------------------------------------------------------------------
-  | ESCAPE
-  |--------------------------------------------------------------------------
-  */
-
+  // Close the product modal with Escape.
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -577,34 +509,23 @@ function Style() {
       }
     };
 
-    window.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
   return (
     <div
       className={`style-page ${
-        selectedProduct
-          ? "collection-page--product-open"
-          : ""
+        selectedProduct ? "collection-page--product-open" : ""
       }`}
     >
       <Navbar cartCount={cartCount} />
 
       <main>
-        {/* =====================================================
-            HERO
-        ====================================================== */}
-
+        {/* HERO */}
         <section className="style-hero">
           <div className="style-hero__background" />
 
@@ -624,23 +545,13 @@ function Style() {
             <h1>
               {t("style.hero.titleLine1")}
               <br />
-              <em>
-                {t("style.hero.titleEmphasis")}
-              </em>
+              <em>{t("style.hero.titleEmphasis")}</em>
             </h1>
 
-            <p>
-              {t("style.hero.description")}
-            </p>
+            <p>{t("style.hero.description")}</p>
 
-            <a
-              href="#style-atelier"
-              className="style-hero__start"
-            >
-              <span>
-                {t("style.hero.button")}
-              </span>
-
+            <a href="#style-atelier" className="style-hero__start">
+              <span>{t("style.hero.button")}</span>
               <i>↓</i>
             </a>
           </div>
@@ -652,14 +563,8 @@ function Style() {
           </div>
         </section>
 
-        {/* =====================================================
-            ATELIER
-        ====================================================== */}
-
-        <section
-          id="style-atelier"
-          className="style-atelier"
-        >
+        {/* ATELIER */}
+        <section id="style-atelier" className="style-atelier">
           <div className="style-atelier__header">
             <div>
               <span className="style-atelier__eyebrow">
@@ -669,23 +574,15 @@ function Style() {
               <h2>
                 {t("style.atelier.titleLine1")}
                 <br />
-                <em>
-                  {t(
-                    "style.atelier.titleEmphasis"
-                  )}
-                </em>
+                <em>{t("style.atelier.titleEmphasis")}</em>
               </h2>
             </div>
 
             <div className="style-atelier__counter">
               <span>
-                {String(
-                  currentStep + 1
-                ).padStart(2, "0")}
+                {String(currentStep + 1).padStart(2, "0")}
               </span>
-
               <i />
-
               <span>03</span>
             </div>
           </div>
@@ -696,63 +593,40 @@ function Style() {
               key={currentQuestion.id}
             >
               <div className="style-question__top">
-                <span>
-                  {currentQuestion.number}
-                </span>
-
+                <span>{currentQuestion.number}</span>
                 <div className="style-question__line" />
-
-                <span>
-                  {t("style.questionLabel")}
-                </span>
+                <span>{t("style.questionLabel")}</span>
               </div>
 
-              <h3>
-                {t(currentQuestion.title)}
-              </h3>
+              <h3>{t(currentQuestion.title)}</h3>
 
               <div className="style-options">
-                {currentQuestion.options.map(
-                  (option, index) => {
-                    const selected =
-                      answers[
-                        currentQuestion.id
-                      ] === option;
+                {currentQuestion.options.map((option, index) => {
+                  const selected = answers[currentQuestion.id] === option;
 
-                    return (
-                      <button
-                        type="button"
-                        key={option}
-                        className={`style-option ${
-                          selected
-                            ? "is-selected"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          selectOption(option)
-                        }
-                      >
-                        <span className="style-option__number">
-                          {String(
-                            index + 1
-                          ).padStart(2, "0")}
-                        </span>
+                  return (
+                    <button
+                      type="button"
+                      key={option}
+                      className={`style-option ${
+                        selected ? "is-selected" : ""
+                      }`}
+                      onClick={() => selectOption(option)}
+                    >
+                      <span className="style-option__number">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
 
-                        <span className="style-option__name">
-                          {t(
-                            `style.options.${option}`
-                          )}
-                        </span>
+                      <span className="style-option__name">
+                        {t(`style.options.${option}`)}
+                      </span>
 
-                        <span className="style-option__mark">
-                          {selected
-                            ? "✓"
-                            : "↗"}
-                        </span>
-                      </button>
-                    );
-                  }
-                )}
+                      <span className="style-option__mark">
+                        {selected ? "✓" : "↗"}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
               <div className="style-question__controls">
@@ -760,112 +634,56 @@ function Style() {
                   type="button"
                   className="style-back"
                   onClick={previousStep}
-                  disabled={
-                    currentStep === 0
-                  }
+                  disabled={currentStep === 0}
                 >
                   <span>←</span>
-
-                  {t(
-                    "style.controls.previous"
-                  )}
+                  {t("style.controls.previous")}
                 </button>
 
                 <button
                   type="button"
                   className="style-next"
                   onClick={nextStep}
-                  disabled={
-                    !answers[
-                      currentQuestion.id
-                    ]
-                  }
+                  disabled={!answers[currentQuestion.id]}
                 >
                   <span>
-                    {currentStep ===
-                    questions.length - 1
-                      ? t(
-                          "style.controls.result"
-                        )
-                      : t(
-                          "style.controls.next"
-                        )}
+                    {currentStep === questions.length - 1
+                      ? t("style.controls.result")
+                      : t("style.controls.next")}
                   </span>
-
                   <i>→</i>
                 </button>
               </div>
             </div>
           ) : (
-            /* =================================================
-               RESULT SUMMARY
-            ================================================= */
-
+            /* RESULT SUMMARY */
             <div className="style-result">
               <span className="style-result__eyebrow">
                 {t("style.result.eyebrow")}
               </span>
 
               <h3>
-                {t(
-                  "style.result.titleLine1"
-                )}
+                {t("style.result.titleLine1")}
                 <br />
-
-                <em>
-                  {t(
-                    "style.result.titleEmphasis"
-                  )}
-                </em>
+                <em>{t("style.result.titleEmphasis")}</em>
               </h3>
 
-              <p>
-                {t(
-                  "style.result.description"
-                )}
-              </p>
+              <p>{t("style.result.description")}</p>
 
               <div className="style-result__summary">
                 <div>
-                  <span>
-                    {t(
-                      "style.result.model"
-                    )}
-                  </span>
-
-                  <strong>
-                    {t(
-                      `style.options.${answers.model}`
-                    )}
-                  </strong>
+                  <span>{t("style.result.model")}</span>
+                  <strong>{t(`style.options.${answers.model}`)}</strong>
                 </div>
 
                 <div>
-                  <span>
-                    {t(
-                      "style.result.occasion"
-                    )}
-                  </span>
-
-                  <strong>
-                    {t(
-                      `style.options.${answers.occasion}`
-                    )}
-                  </strong>
+                  <span>{t("style.result.occasion")}</span>
+                  <strong>{t(`style.options.${answers.occasion}`)}</strong>
                 </div>
 
                 <div>
-                  <span>
-                    {t(
-                      "style.result.style"
-                    )}
-                  </span>
-
-                  <strong>
-                    {t(
-                      `style.options.${answers.style}`
-                    )}
-                  </strong>
+                  <span>{t("style.result.style")}</span>
+                  <strong>{t(`style.options.${answers.style}`)}</strong>
                 </div>
               </div>
 
@@ -874,23 +692,13 @@ function Style() {
                   type="button"
                   className="style-result__primary"
                   onClick={() => {
-                    document
-                      .getElementById(
-                        "style-results"
-                      )
-                      ?.scrollIntoView({
-                        behavior:
-                          "smooth",
-                        block: "start",
-                      });
+                    document.getElementById("style-results")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
                   }}
                 >
-                  <span>
-                    {t(
-                      "style.result.collectionButton"
-                    )}
-                  </span>
-
+                  <span>{t("style.result.collectionButton")}</span>
                   <i>↓</i>
                 </button>
 
@@ -899,87 +707,55 @@ function Style() {
                   className="style-result__restart"
                   onClick={restart}
                 >
-                  {t(
-                    "style.result.restart"
-                  )}
+                  {t("style.result.restart")}
                 </button>
               </div>
             </div>
           )}
         </section>
 
-        {/* =====================================================
-            PERSONALIZED RESULTS
-        ====================================================== */}
-
+        {/* PERSONALIZED RESULTS */}
         {completed && (
           <section
             id="style-results"
             className="collection-showcase style-results"
           >
             <div className="collection-showcase__heading">
-              <span>
-                MK / YOUR SELECTION
-              </span>
+              <span>MK / YOUR SELECTION</span>
 
               <h2>
-                {t(
-                  "style.result.titleLine1"
-                )}
+                {t("style.result.titleLine1")}
                 <br />
-
-                <em>
-                  {t(
-                    "style.result.titleEmphasis"
-                  )}
-                </em>
+                <em>{t("style.result.titleEmphasis")}</em>
               </h2>
             </div>
 
             <div className="style-results__intro">
               <span>
                 {recommendedProducts.length}{" "}
-                {t(
-                  "style.result.recommendations"
-                )}
+                {t("style.result.recommendations")}
               </span>
 
-              <p>
-                {t(
-                  "style.result.recommendationsDescription"
-                )}
-              </p>
+              <p>{t("style.result.recommendationsDescription")}</p>
             </div>
 
             <div className="collection-grid">
-              {recommendedProducts.map(
-                (product, index) => (
-                  <ProductVideo
-                    key={product.id}
-                    product={product}
-                    active={
-  !selectedProduct &&
-  visibleProducts.includes(product.id)
-}
-                    onSelect={
-                      setSelectedProduct
-                    }
-                  />
-                )
-              )}
+              {recommendedProducts.map((product) => (
+                <ProductVideo
+                  key={product.id}
+                  product={product}
+                  active={
+                    !selectedProduct &&
+                    visibleProducts.includes(product.id)
+                  }
+                  onSelect={setSelectedProduct}
+                />
+              ))}
             </div>
 
             <div className="style-results__footer">
-              <Link
-                to="/collection"
-                className="style-results__all"
-              >
-                <span>
-                  {t(
-                    "style.result.viewFullCollection"
-                  )}
-                </span>
-
+              <Link to="/collection" className="style-results__all">
+                <span>{t("style.result.viewFullCollection")}</span>
                 <i>→</i>
               </Link>
             </div>
@@ -989,31 +765,22 @@ function Style() {
 
       <Footer />
 
-      {/* =====================================================
-          PRODUCT MODAL
-      ====================================================== */}
-
+      {/* PRODUCT MODAL */}
       {selectedProduct && (
         <div
           className="collection-product-view"
           role="dialog"
           aria-modal="true"
           aria-labelledby="selected-product-title"
-          onClick={() =>
-            setSelectedProduct(null)
-          }
+          onClick={() => setSelectedProduct(null)}
         >
           <div className="collection-product-view__backdrop" />
 
           <button
             type="button"
             className="collection-product-view__close"
-            onClick={() =>
-              setSelectedProduct(null)
-            }
-            aria-label={t(
-              "collection.close"
-            )}
+            onClick={() => setSelectedProduct(null)}
+            aria-label={t("collection.close")}
           >
             <span />
             <span />
@@ -1021,14 +788,11 @@ function Style() {
 
           <div
             className="collection-product-view__content"
-            onClick={(event) =>
-              event.stopPropagation()
-            }
+            onClick={(event) => event.stopPropagation()}
           >
-            {/* VIDEO */}
-
             <div className="collection-product-view__media">
               <video
+                key={selectedProduct.id}
                 src={selectedProduct.video}
                 controls
                 autoPlay
@@ -1044,8 +808,6 @@ function Style() {
               </span>
             </div>
 
-            {/* INFORMATION */}
-
             <div className="collection-product-view__info">
               <span className="collection-product-view__label">
                 MK CREATION WEDDING
@@ -1060,104 +822,56 @@ function Style() {
               <div className="collection-product-view__prices">
                 <div>
                   <span>EUR</span>
-
                   <strong>
-                    {selectedProduct.priceEUR.toLocaleString(
-                      "fr-FR"
-                    )}{" "}
-                    €
+                    {selectedProduct.priceEUR.toLocaleString("fr-FR")} €
                   </strong>
                 </div>
 
                 <div>
                   <span>DZD</span>
-
                   <strong>
-                    {selectedProduct.priceDZD.toLocaleString(
-                      "fr-FR"
-                    )}{" "}
-                    DA
+                    {selectedProduct.priceDZD.toLocaleString("fr-FR")} DA
                   </strong>
                 </div>
               </div>
-
-              {/* PRODUCT STYLE INFORMATION */}
 
               <div className="style-product-details">
                 <div>
-                  <span>
-                    {t(
-                      "style.result.model"
-                    )}
-                  </span>
-
+                  <span>{t("style.result.model")}</span>
                   <strong>
-                    {t(
-                      `style.options.${selectedProduct.model}`
-                    )}
+                    {t(`style.options.${selectedProduct.model}`)}
                   </strong>
                 </div>
 
                 <div>
-                  <span>
-                    {t(
-                      "style.result.occasion"
-                    )}
-                  </span>
-
+                  <span>{t("style.result.occasion")}</span>
                   <strong>
-                    {t(
-                      `style.options.${selectedProduct.occasion}`
-                    )}
+                    {t(`style.options.${selectedProduct.occasion}`)}
                   </strong>
                 </div>
 
                 <div>
-                  <span>
-                    {t(
-                      "style.result.style"
-                    )}
-                  </span>
-
+                  <span>{t("style.result.style")}</span>
                   <strong>
-                    {t(
-                      `style.options.${selectedProduct.style}`
-                    )}
+                    {t(`style.options.${selectedProduct.style}`)}
                   </strong>
                 </div>
               </div>
 
-              <p>
-                {t(
-                  "collection.productDescription"
-                )}
-              </p>
+              <p>{t("collection.productDescription")}</p>
 
               <button
                 type="button"
                 className="collection-product-view__add"
                 onClick={addToCart}
               >
-                <span>
-                  {t(
-                    "collection.addToCart"
-                  )}
-                </span>
-
+                <span>{t("collection.addToCart")}</span>
                 <i>+</i>
               </button>
 
               <div className="collection-product-view__meta">
-                <span>
-                  {t(
-                    "collection.delivery"
-                  )}
-                </span>
-
-                <span>
-                  MK —{" "}
-                  {selectedProduct.number}
-                </span>
+                <span>{t("collection.delivery")}</span>
+                <span>MK — {selectedProduct.number}</span>
               </div>
             </div>
           </div>

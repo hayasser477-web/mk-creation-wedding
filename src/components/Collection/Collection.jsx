@@ -1,8 +1,9 @@
+
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import { useNavigate } from "react-router-dom";
 import "./Collection.css";
 
 import model1 from "../../assets/images/model.mp4";
@@ -139,7 +140,12 @@ function ProductVideo({ product, active, onSelect }) {
 
     if (active) {
       video.muted = true;
-      video.play().catch(() => {});
+
+      const playVideo = video.play();
+
+      if (playVideo !== undefined) {
+        playVideo.catch(() => {});
+      }
     } else {
       video.pause();
     }
@@ -150,6 +156,7 @@ function ProductVideo({ product, active, onSelect }) {
       className={`collection-product ${
         active ? "collection-product--active" : ""
       }`}
+      data-product-id={product.id}
       onClick={() => onSelect(product)}
     >
       <div className="collection-product__media">
@@ -160,8 +167,7 @@ function ProductVideo({ product, active, onSelect }) {
           muted
           playsInline
           autoPlay={active}
-          preload="auto"
-          poster=""
+          preload="metadata"
         />
 
         <div className="collection-product__veil" />
@@ -187,6 +193,7 @@ function ProductVideo({ product, active, onSelect }) {
 function Collection() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+
   const [filter, setFilter] = useState("all");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [visibleProducts, setVisibleProducts] = useState([]);
@@ -200,51 +207,61 @@ function Collection() {
       ? products
       : products.filter((product) => product.category === filter);
 
- const addToCart = () => {
-  if (!selectedProduct) return;
+  const addToCart = () => {
+    if (!selectedProduct) return;
 
-  const existingCart = JSON.parse(
-    localStorage.getItem("mk-cart") || "[]"
-  );
+    let existingCart;
 
-  const existingProduct = existingCart.find(
-    (item) => item.id === selectedProduct.id
-  );
+    try {
+      existingCart = JSON.parse(
+        localStorage.getItem("mk-cart") || "[]"
+      );
 
-  let updatedCart;
+      if (!Array.isArray(existingCart)) {
+        existingCart = [];
+      }
+    } catch {
+      existingCart = [];
+    }
 
-  if (existingProduct) {
-    updatedCart = existingCart.map((item) =>
-      item.id === selectedProduct.id
-        ? {
-            ...item,
-            quantity: (item.quantity || 1) + 1,
-          }
-        : item
+    const existingProduct = existingCart.find(
+      (item) => item.id === selectedProduct.id
     );
-  } else {
-    updatedCart = [
-      ...existingCart,
-      {
-        ...selectedProduct,
-        quantity: 1,
-      },
-    ];
-  }
 
-  const totalCount = updatedCart.reduce(
-    (total, item) => total + (item.quantity || 1),
-    0
-  );
+    let updatedCart;
 
-  localStorage.setItem("mk-cart", JSON.stringify(updatedCart));
-  localStorage.setItem("mk-cart-count", String(totalCount));
+    if (existingProduct) {
+      updatedCart = existingCart.map((item) =>
+        item.id === selectedProduct.id
+          ? {
+              ...item,
+              quantity: (item.quantity || 1) + 1,
+            }
+          : item
+      );
+    } else {
+      updatedCart = [
+        ...existingCart,
+        {
+          ...selectedProduct,
+          quantity: 1,
+        },
+      ];
+    }
 
-  setCartCount(totalCount);
+    const totalCount = updatedCart.reduce(
+      (total, item) => total + (item.quantity || 1),
+      0
+    );
 
-  navigate("/cart");
-};
+    localStorage.setItem("mk-cart", JSON.stringify(updatedCart));
+    localStorage.setItem("mk-cart-count", String(totalCount));
 
+    setCartCount(totalCount);
+    navigate("/cart");
+  };
+
+  // Close the product details with Escape.
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -258,44 +275,68 @@ function Collection() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  // Desktop: play only the first filtered product.
+  // Mobile: play products while their cards are visible.
   useEffect(() => {
-  const cards = document.querySelectorAll(".collection-product");
+    const cards = document.querySelectorAll(
+      ".collection-grid .collection-product"
+    );
 
-  if (!("IntersectionObserver" in window)) {
-    setVisibleProducts(products.map((product) => product.id));
-    return;
-  }
+    const isMobile = window.matchMedia(
+      "(max-width: 700px)"
+    ).matches;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      setVisibleProducts((current) => {
-        let next = [...current];
+    if (!isMobile) {
+      setVisibleProducts(
+        filteredProducts.length > 0
+          ? [filteredProducts[0].id]
+          : []
+      );
 
-        entries.forEach((entry) => {
-          const id = Number(
-            entry.target.querySelector(".collection-product__number")
-              ?.textContent
-          );
+      return;
+    }
 
-          if (!id) return;
+    if (!("IntersectionObserver" in window)) {
+      setVisibleProducts(
+        filteredProducts.map((product) => product.id)
+      );
 
-          if (entry.isIntersecting) {
-            if (!next.includes(id)) next.push(id);
-          } else {
-            next = next.filter((item) => item !== id);
-          }
+      return;
+    }
+
+    setVisibleProducts([]);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setVisibleProducts((previous) => {
+          const next = new Set(previous);
+
+          entries.forEach((entry) => {
+            const id = Number(entry.target.dataset.productId);
+
+            if (!id) return;
+
+            if (entry.isIntersecting) {
+              next.add(id);
+            } else {
+              next.delete(id);
+            }
+          });
+
+          return [...next];
         });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px 80px 0px",
+      }
+    );
 
-        return next;
-      });
-    },
-    { threshold: 0.2 }
-  );
+    cards.forEach((card) => observer.observe(card));
 
-  cards.forEach((card) => observer.observe(card));
-
-  return () => observer.disconnect();
-}, [filter]);
+    return () => observer.disconnect();
+  }, [filter]);
 
   return (
     <div
@@ -396,16 +437,16 @@ function Collection() {
 
           <div className="collection-grid">
             {filteredProducts.map((product) => (
-  <ProductVideo
-    key={product.id}
-    product={product}
-    active={
-      !selectedProduct &&
-      visibleProducts.includes(product.id)
-    }
-    onSelect={setSelectedProduct}
-  />
-))}
+              <ProductVideo
+                key={product.id}
+                product={product}
+                active={
+                  !selectedProduct &&
+                  visibleProducts.includes(product.id)
+                }
+                onSelect={setSelectedProduct}
+              />
+            ))}
           </div>
         </section>
       </main>
@@ -440,6 +481,7 @@ function Collection() {
             {/* PRODUCT VIDEO */}
             <div className="collection-product-view__media">
               <video
+                key={selectedProduct.id}
                 src={selectedProduct.video}
                 controls
                 autoPlay
@@ -470,7 +512,6 @@ function Collection() {
               <div className="collection-product-view__prices">
                 <div>
                   <span>EUR</span>
-
                   <strong>
                     {selectedProduct.priceEUR.toLocaleString("fr-FR")} €
                   </strong>
@@ -478,7 +519,6 @@ function Collection() {
 
                 <div>
                   <span>DZD</span>
-
                   <strong>
                     {selectedProduct.priceDZD.toLocaleString("fr-FR")} DA
                   </strong>
