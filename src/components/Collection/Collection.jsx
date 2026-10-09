@@ -133,23 +133,36 @@ const products = [
 function ProductVideo({ product, active, onSelect }) {
   const videoRef = useRef(null);
 
-  useEffect(() => {
-    const video = videoRef.current;
+ 
+useEffect(() => {
+  const video = videoRef.current;
+  if (!video) return;
 
-    if (!video) return;
+  video.muted = true;
+  video.playsInline = true;
 
-    if (active) {
-      video.muted = true;
-
-      const playVideo = video.play();
-
-      if (playVideo !== undefined) {
-        playVideo.catch(() => {});
-      }
+  if (active) {
+    if (video.readyState >= 2) {
+      video.play().catch(() => {});
     } else {
-      video.pause();
+      const handleCanPlay = () => {
+        video.play().catch(() => {});
+      };
+
+      video.addEventListener("canplay", handleCanPlay, {
+        once: true,
+      });
+
+      video.load();
+
+      return () => {
+        video.removeEventListener("canplay", handleCanPlay);
+      };
     }
-  }, [active]);
+  } else {
+    video.pause();
+  }
+}, [active]);
 
   return (
     <article
@@ -161,14 +174,14 @@ function ProductVideo({ product, active, onSelect }) {
     >
       <div className="collection-product__media">
         <video
-          ref={videoRef}
-          src={product.video}
-          loop
-          muted
-          playsInline
-          autoPlay={active}
-          preload="metadata"
-        />
+  ref={videoRef}
+  src={product.video}
+  loop
+  muted
+  playsInline
+  autoPlay={active}
+  preload="auto"
+/>
 
         <div className="collection-product__veil" />
 
